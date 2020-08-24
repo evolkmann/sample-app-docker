@@ -21,26 +21,6 @@ spec:
         app: sample-app-docker
     spec:
       containers:
-        - image: gcr.io/exportarts-k8s/github.com/evolkmann/sample-app-docker
+        - image: eu.gcr.io/exportarts-k8s/sample-docker-app
           imagePullPolicy: IfNotPresent
           name: sample-app-docker-1
----
-apiVersion: autoscaling/v2beta1
-kind: HorizontalPodAutoscaler
-metadata:
-  labels:
-    app: sample-app-docker
-  name: sample-app-docker-hpa-6ctr
-  namespace: customer-1
-spec:
-  maxReplicas: 5
-  metrics:
-    - resource:
-        name: cpu
-        targetAverageUtilization: 80
-      type: Resource
-  minReplicas: 1
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: sample-app-docker
