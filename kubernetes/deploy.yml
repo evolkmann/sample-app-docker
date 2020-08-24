@@ -27,13 +27,6 @@ spec:
           imagePullPolicy: IfNotPresent
           name: sample-app-docker-1
 ---
-apiVersion: compute.cnrm.cloud.google.com/v1beta1
-kind: ComputeAddress
-metadata:
-  name: sample-app-docker-ip
-spec:
-  location: global
----
 apiVersion: v1
 kind: Service
 metadata:
