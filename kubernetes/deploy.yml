@@ -42,3 +42,13 @@ spec:
     app: sample-app-docker
   type: LoadBalancer
   loadBalancerIP: ""
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: sample-app-docker-ingress
+  namespace: customer-1
+spec:
+  backend:
+    serviceName: sample-app-docker-service
+    servicePort: 80
