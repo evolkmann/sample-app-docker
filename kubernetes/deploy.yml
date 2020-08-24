@@ -1,3 +1,5 @@
+# Values in ~~tildes~~ are intended to be replaced
+# by Jenkins!
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,6 +23,6 @@ spec:
         app: sample-app-docker
     spec:
       containers:
-        - image: eu.gcr.io/exportarts-k8s/sample-docker-app
+        - image: ~~IMAGE~~
           imagePullPolicy: IfNotPresent
           name: sample-app-docker-1

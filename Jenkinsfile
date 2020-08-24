@@ -14,7 +14,7 @@ pipeline {
     GOOGLE_CLOUD_PROJECT = 'exportarts-k8s'
     GOOGLE_CLOUD_ZONE = 'europe-west3-a'
     GOOGLE_CLOUD_CLUSTER = 'prod'
-    GOOGLE_CLOUD_SERVICE = 'sample-docker-app'
+    K8S_DEPLOY_YAML = 'kubernetes/deploy.yml'
     TAG = "eu.gcr.io/$GOOGLE_CLOUD_PROJECT/sample-docker-app:$GIT_COMMIT"
   }
 
@@ -60,7 +60,10 @@ pipeline {
         sh script: "gcloud config set project $GOOGLE_CLOUD_PROJECT", label: "Set Project ID"
         sh script: "gcloud config set compute/zone $GOOGLE_CLOUD_ZONE", label: "Set Zone"
         sh script: "gcloud container clusters get-credentials $GOOGLE_CLOUD_CLUSTER", label: "Get Cluster Credentials"
-        sh script: "kubectl apply -f kubernetes/deploy.yml", label: "Deploy"
+        sh script: """
+          sed -i 's/~~IMAGE~~/$TAG/g' $K8S_DEPLOY_YAML
+        """, label: "Replace with Environment Vars"
+        sh script: "kubectl apply -f $K8S_DEPLOY_YAML", label: "Deploy"
       }
     }
     
