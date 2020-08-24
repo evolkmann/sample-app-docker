@@ -27,18 +27,35 @@ spec:
           imagePullPolicy: IfNotPresent
           name: sample-app-docker-1
 ---
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeAddress
+metadata:
+  name: sample-app-docker-ip
+spec:
+  location: global
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: sample-app-docker-service
-  namespace: customer-1
-  labels:
-    app: sample-app-docker
 spec:
-  ports:
-  - protocol: TCP
-    port: 80
+  type: NodePort
   selector:
     app: sample-app-docker
-  type: LoadBalancer
-  loadBalancerIP: ""
+    tier: web
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: sample-app-docker-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: sample-app-docker-ip
+  labels:
+    app: hello
+spec:
+  backend:
+    serviceName: sample-app-docker-service
+    servicePort: 80
