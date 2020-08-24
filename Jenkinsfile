@@ -25,6 +25,7 @@ pipeline {
 
       steps {
         sh script: "gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS", label: "Docker Login"
+        sh script: "gcloud auth configure-docker eu.gcr.io", label: "Configure Docker Credentials"
       }
     }
 
