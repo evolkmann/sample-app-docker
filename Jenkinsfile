@@ -61,8 +61,9 @@ pipeline {
         sh script: "gcloud config set compute/zone $GOOGLE_CLOUD_ZONE", label: "Set Zone"
         sh script: "gcloud container clusters get-credentials $GOOGLE_CLOUD_CLUSTER", label: "Get Cluster Credentials"
         sh script: """
-          sed -i 's/~~IMAGE~~/$TAG/g' $K8S_DEPLOY_YAML
+          sed -i 's ~~IMAGE~~ $TAG g' $K8S_DEPLOY_YAML
         """, label: "Replace with Environment Vars"
+        sh script: "cat $K8S_DEPLOY_YAML", label: "Dump Deployment File"
         sh script: "kubectl apply -f $K8S_DEPLOY_YAML", label: "Deploy"
       }
     }
