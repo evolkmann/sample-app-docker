@@ -48,7 +48,14 @@ kind: Ingress
 metadata:
   name: sample-app-docker-ingress
   namespace: customer-1
+  annotations:
+     kubernetes.io/ingress.class: nginx
 spec:
-  backend:
-    serviceName: sample-app-docker-service
-    servicePort: 80
+  rules:
+  - host: sample-app-docker.k8s.enzo-volkmann.de
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: sample-app-docker-service
+          servicePort: 80
