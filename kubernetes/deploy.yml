@@ -52,7 +52,7 @@ metadata:
      kubernetes.io/ingress.class: nginx
 spec:
   rules:
-  - host: sample-app-docker.k8s.enzo-volkmann.de
+  - host: sample-app-docker.prod.k8s.enzo-volkmann.de
     http:
       paths:
       - path: /
