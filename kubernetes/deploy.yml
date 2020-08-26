@@ -40,8 +40,15 @@ spec:
     port: 80
   selector:
     app: sample-app-docker
-  type: LoadBalancer
-  loadBalancerIP: ""
+  type: NodePort
+---
+apiVersion: networking.gke.io/v1beta2
+kind: ManagedCertificate
+metadata:
+  name: prod-k8s-enzo-volkmann-de-cert
+spec:
+  domains:
+    - '*.prod.k8s.enzo-volkmann.de'
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -49,7 +56,9 @@ metadata:
   name: sample-app-docker-ingress
   namespace: customer-1
   annotations:
-     kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.global-static-ip-name: prod-k8s-enzo-volkmann-de-address
+    networking.gke.io/managed-certificates: prod-k8s-enzo-volkmann-de-cert
 spec:
   rules:
   - host: sample-app-docker.prod.k8s.enzo-volkmann.de
