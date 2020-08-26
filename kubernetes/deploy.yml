@@ -48,7 +48,7 @@ metadata:
   name: prod-k8s-enzo-volkmann-de-cert
 spec:
   domains:
-    - '*.prod.k8s.enzo-volkmann.de'
+    - sample-app-docker.prod.k8s.enzo-volkmann.de
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
