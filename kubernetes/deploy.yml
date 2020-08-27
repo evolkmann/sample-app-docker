@@ -45,10 +45,10 @@ spec:
 apiVersion: networking.gke.io/v1beta2
 kind: ManagedCertificate
 metadata:
-  name: prod-k8s-enzo-volkmann-de-cert
+  name: sample-app-docker-prod-k8s-evolkmann-de-cert
 spec:
   domains:
-    - sample-app-docker.prod.k8s.enzo-volkmann.de
+    - sample-app-docker.prod.k8s.evolkmann.de
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -57,11 +57,11 @@ metadata:
   namespace: customer-1
   annotations:
     kubernetes.io/ingress.class: nginx
-    kubernetes.io/ingress.global-static-ip-name: prod-k8s-enzo-volkmann-de-address
-    networking.gke.io/managed-certificates: prod-k8s-enzo-volkmann-de-cert
+    kubernetes.io/ingress.global-static-ip-name: sample-app-docker-prod-k8s-evolkmann-address
+    networking.gke.io/managed-certificates: sample-app-docker-prod-k8s-evolkmann-de-cert
 spec:
   rules:
-  - host: sample-app-docker.prod.k8s.enzo-volkmann.de
+  - host: sample-app-docker.prod.k8s.evolkmann.de
     http:
       paths:
       - path: /
