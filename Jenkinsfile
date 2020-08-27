@@ -36,7 +36,7 @@ pipeline {
       when {
         anyOf {
           branch 'master';
-          tag "v*";
+          tag "*";
         }
       }
 
@@ -50,7 +50,7 @@ pipeline {
       when {
         anyOf {
           branch 'master';
-          tag "v*";
+          tag "*";
         }
       }
 
@@ -64,7 +64,7 @@ pipeline {
       when {
         anyOf {
           branch 'master';
-          tag "v*";
+          tag "*";
         }
       }
 
