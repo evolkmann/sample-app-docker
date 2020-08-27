@@ -24,9 +24,9 @@ pipeline {
       steps {
         script {
           if (env.TAG_NAME) {
-            env.DOCKER_TAG = env.TAG_Name
+            env.DOCKER_IMAGE_TAG = env.TAG_Name
           } else {
-            env.DOCKER_TAG = env.GIT_BRANCH + '-' + env.BUILD_NUMBER
+            env.DOCKER_IMAGE_TAG = env.GIT_BRANCH + '-' + env.BUILD_NUMBER
           }
         }
       }
