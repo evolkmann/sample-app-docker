@@ -12,13 +12,25 @@ pipeline {
     BUILD_ID = "${GIT_COMMIT}-${BUILD_ID}"
     GOOGLE_APPLICATION_CREDENTIALS = credentials('jenkins@exportarts-k8s.iam.gserviceaccount.com')
     GOOGLE_CLOUD_PROJECT = 'exportarts-k8s'
-    GOOGLE_CLOUD_ZONE = 'europe-west3-a'
+    GOOGLE_CLOUD_REGION = 'europe-west3'
+    GOOGLE_CLOUD_ZONE = "$GOOGLE_CLOUD_REGION-a"
     GOOGLE_CLOUD_CLUSTER = 'prod'
     K8S_DEPLOY_YAML = 'kubernetes/deploy.yml'
-    TAG = "eu.gcr.io/$GOOGLE_CLOUD_PROJECT/sample-docker-app:$GIT_COMMIT"
+    DOCKER_IMAGE_NAME = "eu.gcr.io/$GOOGLE_CLOUD_PROJECT/sample-docker-app"
   }
 
   stages {
+    stage('Set Environment Variables') {
+      steps {
+        script {
+          if (env.TAG_NAME) {
+            env.DOCKER_TAG = env.TAG_Name
+          } else {
+            env.DOCKER_TAG = env.GIT_BRANCH + '-' + env.BUILD_NUMBER
+          }
+        }
+      }
+    }
 
     stage('Docker login') {
       when {
@@ -43,8 +55,8 @@ pipeline {
       }
 
       steps {
-        sh script: "docker build -t $TAG .", label: "Build Docker Image"
-        sh script: "docker push $TAG", label: "Push Docker Image"
+        sh script: "docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG .", label: "Build Docker Image"
+        sh script: "docker push $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG", label: "Push Docker Image"
       }
     }
 
@@ -61,7 +73,7 @@ pipeline {
         sh script: "gcloud config set compute/zone $GOOGLE_CLOUD_ZONE", label: "Set Zone"
         sh script: "gcloud container clusters get-credentials $GOOGLE_CLOUD_CLUSTER", label: "Get Cluster Credentials"
         sh script: """
-          sed -i 's ~~IMAGE~~ $TAG g' $K8S_DEPLOY_YAML
+          sed -i 's ~~IMAGE~~ $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG g' $K8S_DEPLOY_YAML
         """, label: "Replace with Environment Vars"
         sh script: "cat $K8S_DEPLOY_YAML", label: "Dump Deployment File"
         sh script: "kubectl apply -f $K8S_DEPLOY_YAML", label: "Deploy"
